@@ -36,7 +36,7 @@ function DirectApiTest() {
 
     try {
       const response = await axios.post(
-        'https://nemmoh-ecommerce-server.onrender.com/api/admin/products/add',
+        'https://rekkerbrands.onrender.com/api/admin/products/add',
         testProduct
       );
       
@@ -56,7 +56,7 @@ function DirectApiTest() {
     
     try {
       const response = await axios.get(
-        'https://nemmoh-ecommerce-server.onrender.com/api/admin/products/get'
+        'https://rekkerbrands.onrender.com/api/admin/products/get'
       );
       
       console.log("Fetch Products Response:", response.data);

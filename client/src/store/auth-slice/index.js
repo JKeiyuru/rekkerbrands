@@ -18,7 +18,7 @@ export const registerUser = createAsyncThunk(
   async ({ formData, firebaseUid }, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        "https://nemmoh-ecommerce-server.onrender.com/api/auth/register",
+        "https://rekkerbrands.onrender.com/api/auth/register",
         { ...formData, firebaseUid },
         { withCredentials: true }
       );
@@ -35,7 +35,7 @@ export const loginUser = createAsyncThunk(
   async ({ formData, firebaseUid }, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        "https://nemmoh-ecommerce-server.onrender.com/api/auth/login",
+        "https://rekkerbrands.onrender.com/api/auth/login",
         { ...formData, firebaseUid },
         { withCredentials: true }
       );
@@ -53,7 +53,7 @@ export const logoutUser = createAsyncThunk(
     try {
       await signOut(auth);
       const response = await axios.post(
-        "https://nemmoh-ecommerce-server.onrender.com/api/auth/logout",
+        "https://rekkerbrands.onrender.com/api/auth/logout",
         {},
         { withCredentials: true }
       );
@@ -84,7 +84,7 @@ export const checkAuth = createAsyncThunk(
 
       console.log('📡 Making checkAuth request to backend...');
       const response = await axios.get(
-        "https://nemmoh-ecommerce-server.onrender.com/api/auth/check-auth",
+        "https://rekkerbrands.onrender.com/api/auth/check-auth",
         {
           withCredentials: true,
           headers,
@@ -117,7 +117,7 @@ export const syncFirebaseAuth = createAsyncThunk(
       
       // Try to authenticate with backend using the social-login endpoint
       const response = await axios.post(
-        "https://nemmoh-ecommerce-server.onrender.com/api/auth/social-login",
+        "https://rekkerbrands.onrender.com/api/auth/social-login",
         {
           token: idToken,
           uid: firebaseUser.uid,

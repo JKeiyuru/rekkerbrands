@@ -181,7 +181,7 @@ function ShoppingCheckout() {
       const response = await axios.post("/api/shop/payment", {
         phone: phoneNumber,
         amount: totalCartAmount,
-        callbackUrl: "https://nemmoh-ecommerce-server.onrender.com/api/shop/mpesa-callback",
+        callbackUrl: "https://rekkerbrands.onrender.com/api/shop/mpesa-callback",
         orderData,
       });
 

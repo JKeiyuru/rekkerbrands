@@ -22,7 +22,7 @@ export const addNewProduct = createAsyncThunk(
       });
 
       const response = await axios.post(
-        "https://nemmoh-ecommerce-server.onrender.com/api/admin/products/add",
+        "https://rekkerbrands.onrender.com/api/admin/products/add",
         formData,
         {
           headers: {
@@ -45,7 +45,7 @@ export const fetchAllProducts = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get(
-        "https://nemmoh-ecommerce-server.onrender.com/api/admin/products/get"
+        "https://rekkerbrands.onrender.com/api/admin/products/get"
       );
       
       console.log("Redux: Fetched products:", {
@@ -82,7 +82,7 @@ export const editProduct = createAsyncThunk(
       });
 
       const response = await axios.put(
-        `https://nemmoh-ecommerce-server.onrender.com/api/admin/products/edit/${id}`,
+        `https://rekkerbrands.onrender.com/api/admin/products/edit/${id}`,
         formData,
         {
           headers: {
@@ -107,7 +107,7 @@ export const deleteProduct = createAsyncThunk(
       console.log("Redux: Deleting product with ID:", id);
       
       const response = await axios.delete(
-        `https://nemmoh-ecommerce-server.onrender.com/api/admin/products/delete/${id}`
+        `https://rekkerbrands.onrender.com/api/admin/products/delete/${id}`
       );
 
       console.log("Redux: Delete product response:", response.data);

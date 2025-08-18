@@ -69,7 +69,7 @@ function VariationUploader({ formData, setFormData }) {
     formDataUpload.append("my_file", file);
 
     const response = await axios.post(
-      "https://nemmoh-ecommerce-server.onrender.com/api/admin/products/upload-image",
+      "https://rekkerbrands.onrender.com/api/admin/products/upload-image",
       formDataUpload,
       {
         headers: {
