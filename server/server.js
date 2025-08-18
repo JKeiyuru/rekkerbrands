@@ -10,10 +10,9 @@ const admin = require("firebase-admin");
 
 // Initialize Firebase Admin (only if not already initialized)
 if (!admin.apps.length) {
-  // Check if we have Firebase environment variables
   const firebaseConfig = {
     projectId: process.env.FIREBASE_PROJECT_ID,
-    privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, "\n"), // Fix newlines
+    privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, "\n"),
     clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
   };
 
@@ -21,10 +20,9 @@ if (!admin.apps.length) {
     hasProjectId: !!firebaseConfig.projectId,
     hasPrivateKey: !!firebaseConfig.privateKey,
     hasClientEmail: !!firebaseConfig.clientEmail,
-    projectId: firebaseConfig.projectId // This will help debug
+    projectId: firebaseConfig.projectId
   });
 
-  // Only initialize if we have the required environment variables
   if (firebaseConfig.projectId && firebaseConfig.privateKey && firebaseConfig.clientEmail) {
     admin.initializeApp({
       credential: admin.credential.cert(firebaseConfig),
@@ -36,9 +34,6 @@ if (!admin.apps.length) {
     console.warn("Make sure you have FIREBASE_PROJECT_ID, FIREBASE_PRIVATE_KEY, and FIREBASE_CLIENT_EMAIL in your .env file");
   }
 }
-
-
-
 
 // Routes
 const authRouter = require("./routes/auth/auth-routes");
@@ -71,7 +66,10 @@ const allowedOrigins = process.env.CORS_ORIGIN?.split(",") || [];
 
 const corsOptions = {
   origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
       console.warn(`Blocked by CORS: ${origin}`);
@@ -79,7 +77,7 @@ const corsOptions = {
     }
   },
   credentials: true,
-  methods: ["GET", "POST", "DELETE", "PUT", "PATCH"],
+  methods: ["GET", "POST", "DELETE", "PUT", "PATCH", "OPTIONS"],
   allowedHeaders: [
     "Content-Type",
     "Authorization",
@@ -87,9 +85,13 @@ const corsOptions = {
     "Accept",
     "Cache-Control",
   ],
+  optionsSuccessStatus: 200 // Some legacy browsers choke on 204
 };
 
+// Handle preflight requests
+app.options('*', cors(corsOptions)); // Enable preflight for all routes
 app.use(cors(corsOptions));
+
 app.use(cookieParser());
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true }));
@@ -105,11 +107,9 @@ app.use(limiter);
 // Static Files
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-
+// Headers for popup windows
 app.use((req, res, next) => {
-  // Allow popup windows to be closed
   res.setHeader('Cross-Origin-Opener-Policy', 'same-origin-allow-popups');
-  // Optional: Also set other CORS headers if needed
   res.setHeader('Cross-Origin-Embedder-Policy', 'unsafe-none');
   next();
 });
