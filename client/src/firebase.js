@@ -1,4 +1,5 @@
 import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
 import { 
   getAuth, 
   GoogleAuthProvider, 
@@ -6,15 +7,17 @@ import {
 } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAsCrsQI2ZklM7zXkKV93pJai-EQ51LpAs",
-  authDomain: "nemmoh-ecommerce.firebaseapp.com",
-  projectId: "nemmoh-ecommerce",
-  storageBucket: "nemmoh-ecommerce.appspot.com",
-  messagingSenderId: "394191972626",
-  appId: "1:394191972626:web:a8af2e06fc405f928e6bcb"
+  apiKey: "AIzaSyCgL-IVvwNGjVOb9GHIEUyKk1ZHEGQWhQ8",
+  authDomain: "rekker-brands.firebaseapp.com",
+  projectId: "rekker-brands",
+  storageBucket: "rekker-brands.firebasestorage.app",
+  messagingSenderId: "636958688936",
+  appId: "1:636958688936:web:4ae6e444eb50d37168649d",
+  measurementId: "G-FJKZN95Z54"
 };
 
 const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
 export const auth = getAuth(app);
 
 // Add provider exports

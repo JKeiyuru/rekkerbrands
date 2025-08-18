@@ -10,6 +10,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/firebase";
 import { AuthProviders } from "@/components/auth/auth-providers";
+import { Crown, Shield, Star } from "lucide-react";
 
 const initialState = {
   email: "",
@@ -34,8 +35,11 @@ function AuthLogin() {
   }, [isAuthenticated, user, navigate]);
 
   // Helper function to handle successful login navigation
-  const handleSuccessfulLogin = (userData, message = "Logged in successfully!") => {
-    toast({ title: message });
+  const handleSuccessfulLogin = (userData, message = "Welcome back to Rekker!") => {
+    toast({ 
+      title: message,
+      description: "Accessing your premium collection..."
+    });
     console.log('✅ Login successful for user:', {
       email: userData.email || userData.userName,
       role: userData.role
@@ -85,24 +89,24 @@ function AuthLogin() {
         console.error('❌ Backend login error:', backendError);
         
         // Provide specific error messages
-        let errorMessage = "Login failed. Please check your credentials and try again.";
+        let errorMessage = "Authentication failed. Please verify your credentials.";
         
         if (firebaseError.code === 'auth/user-not-found') {
-          errorMessage = "No account found with this email. Please register first.";
+          errorMessage = "Account not found. Please register for exclusive access.";
         } else if (firebaseError.code === 'auth/wrong-password') {
           errorMessage = "Incorrect password. Please try again.";
         } else if (firebaseError.code === 'auth/invalid-email') {
-          errorMessage = "Invalid email address format.";
+          errorMessage = "Please enter a valid email address.";
         } else if (firebaseError.code === 'auth/user-disabled') {
-          errorMessage = "This account has been disabled. Please contact support.";
+          errorMessage = "Account access suspended. Contact our concierge team.";
         } else if (firebaseError.code === 'auth/invalid-credential') {
-          errorMessage = "Invalid credentials. Please check your email and password.";
+          errorMessage = "Invalid credentials. Please check your details.";
         } else if (firebaseError.message) {
           errorMessage = firebaseError.message;
         }
 
         toast({
-          title: "Login failed",
+          title: "Access Denied",
           description: errorMessage,
           variant: "destructive",
         });
@@ -115,7 +119,7 @@ function AuthLogin() {
   // Handle Google/Social login success
   const handleSocialLoginSuccess = (userData) => {
     console.log('🎉 Social login successful:', userData);
-    handleSuccessfulLogin(userData.user || userData, "Logged in successfully!");
+    handleSuccessfulLogin(userData.user || userData, "Welcome to your premium experience!");
     // Navigation will be handled by useEffect when Redux state updates
   };
 
@@ -136,46 +140,99 @@ function AuthLogin() {
   }
 
   return (
-    <div className="mx-auto w-full max-w-md space-y-6">
-      <div className="text-center">
-        <h1 className="text-3xl font-bold tracking-tight text-foreground">
-          Sign in to your account
-        </h1>
-        <p className="mt-2">
-          Don&apos;t have an account
+    <div className="mx-auto w-full max-w-md space-y-8">
+      {/* Luxury Header */}
+      <div className="text-center space-y-4">
+        <div className="flex items-center justify-center gap-2 mb-4">
+          <Crown className="w-8 h-8 text-amber-600" />
+          <div className="flex flex-col">
+            <span className="text-2xl font-bold bg-gradient-to-r from-amber-700 to-amber-600 bg-clip-text text-transparent">
+              REKKER
+            </span>
+            <span className="text-xs text-amber-600 font-medium tracking-widest -mt-1">
+              PREMIUM ACCESS
+            </span>
+          </div>
+        </div>
+        
+        <div className="space-y-2">
+          <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
+            Welcome Back
+          </h1>
+          <p className="text-amber-700 font-medium">
+            Access your exclusive collection
+          </p>
+        </div>
+        
+        {/* Premium Features */}
+        <div className="flex items-center justify-center gap-6 py-4">
+          <div className="flex items-center gap-1">
+            <Shield className="w-4 h-4 text-amber-600" />
+            <span className="text-xs text-gray-600 font-medium">Secure</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <Star className="w-4 h-4 text-amber-600" />
+            <span className="text-xs text-gray-600 font-medium">Premium</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <Crown className="w-4 h-4 text-amber-600" />
+            <span className="text-xs text-gray-600 font-medium">Exclusive</span>
+          </div>
+        </div>
+        
+        <p className="mt-4 text-gray-600">
+          New to Rekker?
           <Link
-            className="font-medium ml-2 text-primary hover:underline"
+            className="font-semibold ml-2 text-amber-600 hover:text-amber-700 hover:underline transition-all duration-300"
             to="/auth/register"
           >
-            Register
+            Join the Collection
           </Link>
         </p>
       </div>
       
-      <CommonForm
-        formControls={loginFormControls}
-        buttonText={isLoading ? "Signing In..." : "Sign In"}
-        formData={formData}
-        setFormData={setFormData}
-        onSubmit={onSubmit}
-        disabled={isLoading}
-      />
+      {/* Premium Form Wrapper */}
+      <div className="bg-gradient-to-br from-white to-amber-50/30 p-6 rounded-2xl border border-amber-200/50 shadow-lg">
+        <CommonForm
+          formControls={loginFormControls}
+          buttonText={isLoading ? "Authenticating..." : "Access Collection"}
+          formData={formData}
+          setFormData={setFormData}
+          onSubmit={onSubmit}
+          disabled={isLoading}
+        />
+      </div>
       
+      {/* Elegant Divider */}
       <div className="relative">
         <div className="absolute inset-0 flex items-center">
-          <span className="w-full border-t" />
+          <span className="w-full border-t border-amber-200" />
         </div>
         <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-background px-2 text-muted-foreground">
-            Or continue with
+          <span className="bg-gradient-to-r from-amber-50 to-white px-4 text-amber-600 font-medium tracking-wider">
+            Or continue with premium access
           </span>
         </div>
       </div>
 
-      <AuthProviders 
-        onSuccess={handleSocialLoginSuccess}
-        onError={handleSocialLoginError}
-      />
+      {/* Social Login */}
+      <div className="bg-gradient-to-br from-white to-amber-50/30 p-4 rounded-2xl border border-amber-200/50">
+        <AuthProviders 
+          onSuccess={handleSocialLoginSuccess}
+          onError={handleSocialLoginError}
+        />
+      </div>
+
+      {/* Trust Indicators */}
+      <div className="text-center text-xs text-gray-500 space-y-2">
+        <p className="flex items-center justify-center gap-2">
+          <Shield className="w-3 h-3 text-amber-600" />
+          Protected by enterprise-grade security
+        </p>
+        <p>
+          Your data is encrypted and never shared
+        </p>
+      </div>
     </div>
   );
 }
